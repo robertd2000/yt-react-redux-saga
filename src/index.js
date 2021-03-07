@@ -1,13 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { Provider } from 'react-redux';
+import { applyMiddleware, compose } from 'redux';
+import { createStore } from 'redux';
+import thunk from 'redux-thunk';
 import App from './App';
+import { forbiddenMiddleware } from './redux/middleware';
+import { rootReducer } from './redux/rootReducer';
 import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
-  <React.StrictMode>
+const store = createStore( rootReducer, compose(
+  applyMiddleware(thunk, forbiddenMiddleware),
+  // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+) )
+
+const app = (
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>
+)
+ReactDOM.render(
+  app,
   document.getElementById('root')
 );
 
